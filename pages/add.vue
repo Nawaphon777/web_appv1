@@ -101,6 +101,8 @@
   
 </template>
 <script>
+
+import axios from 'axios'
   export default {
     data: () => ({
       valid: true,
@@ -140,7 +142,7 @@
             this.username = ""
             this.password = ""
             this.dep = ""
-        
+
 
 
         if (data.ok == 1) {
