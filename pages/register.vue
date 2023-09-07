@@ -1,4 +1,5 @@
 <template>
+  
   <v-form
     ref="form"
     v-model="valid"
@@ -101,8 +102,10 @@
   
 </template>
 <script>
+import axios from "axios";
   export default {
     data: () => ({
+      file: [],
       valid: true,
       username: '',
       password: '',   
