@@ -87,26 +87,6 @@
           <v-btn color="success" @click="bntSensor2">CLOSE</v-btn>
         </v-col>
       </v-row>
-      <v-row align="center" justify="center" >
-      <v-btn
-        size="200"
-        display="flex"
-        variant="tonal"
-        :color="lightColor"
-        class="rounded-circle"
-      >
-        <v-icon size="40" :icon="isLight2On"></v-icon>
-      </v-btn>
-      </v-row>
-      <v-row align="center" justify="center">
-        <v-col cols="auto">
-          <v-btn color="primary"  @click="bntSensor3">OPEN</v-btn>
-        </v-col>
-  
-        <v-col cols="auto">
-          <v-btn color="success" @click="bntSensor2">CLOSE</v-btn>
-        </v-col>
-      </v-row>
     </div>
   </v-container>
     <v-container style="display: flex;">
@@ -221,7 +201,7 @@ export default {
     
     return {
       drawer: false,
-      rail: true,
+        rail: true,
       value: 29,
       value2: 30,
       value3: 0,
@@ -239,11 +219,9 @@ export default {
       this.client.subscribe("temp2");
       this.client.subscribe("patt1");
       this.client.subscribe("patt2");
-      this.client.subscribe("patt3");
       this.client.subscribe("1On");
       this.client.subscribe("2Off");
       this.client.subscribe("cm");
-      this.client.subscribe("iot");
       
     });
     this.client.on("message", (topic, message) => {
@@ -277,13 +255,6 @@ export default {
         this.lightColor = "grey-darken-4";
         // client.end()
       }
-      if (topic === "iot") {
-        this.sensor1Value = message.toString();
-        console.log("sensor1Data=", this.sensor1Value);
-        this.isLight2On = "mdi-lightbulb-on-outline";
-        this.lightColor = "amber-darken-4";
-        // client.end()
-      }
       if (topic === "cm") {
         //  console.log("connect_message/cm=>");
         // message is Buffer
@@ -304,10 +275,6 @@ export default {
     },
     bntSensor2() {
       this.client.publish("patt2", "0");
-      console.log("sensor2");
-    },
-    bntSensor3() {
-      this.client.publish("patt3", "0");
       console.log("sensor2");
     },
   },

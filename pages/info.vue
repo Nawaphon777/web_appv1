@@ -1,77 +1,57 @@
-
 <template>
-    <v-container>
-      <v-row align="center" justify="center">
-       <v-col cols="auto">
-          <v-btn color="red">Sensor1</v-btn>
-        </v-col>
-  
-        <v-col cols="auto">
-          <v-btn > Sensor12</v-btn>
-        </v-col>
-      </v-row>
-      
-    </v-container>
-
+  <!-- ... Your existing template code ... -->
+  <div class="sensor2">
     <div class="text-center">
-    <v-progress-circular
-      :rotate="360"
-      :size="100"
-      :width="15"
-      :model-value="value"
-      color="teal"
-    >
-      {{ value }}
-      C
-    </v-progress-circular>
-        
-    <v-progress-circular
-      :rotate="-90"
-      :size="100"
-      :width="15"
-      :model-value="value2"
-      color="primary"
-    >
-      {{ value2 }}
-      C
-    </v-progress-circular>
-
-    
+      <v-progress-circular
+        :rotate="-90"
+        :size="200"
+        :width="30"
+        :model-value="value"
+        color="primary"
+      >
+        ความชื้น {{ value }}%
+      </v-progress-circular>
+      &nbsp; &nbsp;
+      <v-progress-circular
+        :rotate="90"
+        :size="200"
+        :width="30"
+        :model-value="value2"
+        color="red"
+      >
+        อุณหภูมิ {{ value2 }} C
+      </v-progress-circular>
+      &nbsp; &nbsp;
+      <v-progress-circular
+        :rotate="90"
+        :size="200"
+        :width="30"
+        :model-value="value3"
+        color="DarkGreen"
+      >
+        วัดระยะ {{ value3 }} CM
+      </v-progress-circular>
+    </div>
+    <div class="sensor-name">
+      <!-- Place the text "c9j]tvyo" outside the circular progress bars -->
+      c9j]tvyo
+    </div>
+    <div>
+      <!-- ... Your existing content ... -->
+    </div>
   </div>
-  </template>
-  <script>
-  
-  var mqtt = require('mqtt')
-  
+  <!-- ... Your existing template code ... -->
+</template>
 
+<style scoped>
+/* Your existing styles... */
 
-  export default {
-    
-    
-    data() {
-      return {
-        value: 29,
-        value2: 30,
-      };
-    },
-    created() {
-      this.client = mqtt.connect("ws://broker.emqx.io:8083/mqtt");
-      this.client.on("connect", () => {
-        console.log("on client connect");
-        this.client.subscribe("temp1");
-        this.client.subscribe("temp2");
-      });
-      this.client.on("message", (topic, message) => {
-        if (topic === "temp1") {
-          console.log("connect_message/temp1");
-          // message is Buffer
-          console.log("GOT:", message.toString());
-          this.msg_t = message.toString();
-          console.log("data=", this.msg_t);
-  
-          // client.end()
-        }
-      });
-    },
-  };
-  </script>
+.sensor-name {
+  /* Your CSS styles for the text element */
+  font-size: 18px;
+  color: #333; /* Change the text color to your preference */
+  margin-top: 10px; /* Adjust the top margin as needed */
+  text-align: center; /* Center-align the text */
+}
+
+</style>
