@@ -1,5 +1,4 @@
 <template>
-  <v-file-input v-model="file" accept="image/*"> </v-file-input>
   <v-form ref="form" v-model="valid" lazy-validation>
     <v-text-field
       v-model="username"
@@ -10,12 +9,6 @@
 
     <v-text-field v-model="password" label="Password" required></v-text-field>
 
-    <v-select
-      v-model="dep"
-      :items="items"
-      label="DEPARTMENT"
-      required
-    ></v-select>
     <v-btn color="error" class="mr-4" @click="reset"> Reset Form </v-btn>
     <v-btn color="warning" @click="doSave"> Save </v-btn>
   </v-form>
@@ -60,67 +53,58 @@
     </v-dialog>
   </div>
 </template>
+
 <script>
+import axios from 'axios';
 
-import axios from 'axios'
-  export default {
-    data: () => ({
-      file: [],
-      valid: true,
-      username: "",
-      password: "",   
-      dep: null,
-      dialog: false,
-      dialog_error : false,
-      items: [
-        'IT',
-        'computer',
-        'electronic',
-        'electircal power',
-      ],
-    }),
+export default {
+  data: () => ({
+    valid: true,
+    username: "",
+    password: "",
+    dep: null,
+    dialog: false,
+    dialog_error: false,
+  }),
 
-    methods: {
-      async doSave () {
-        console.log("save data");
-        console.log(this.username);
-        console.log(this.password);
-        console.log(this.dep); 
-        //http://localhost/7001/insert?name=username&passwd=password&dep=dep
-        //  const url = 'http://localhost:7001/insert?name='+ this.username +'&passwd=' + this.password + '&dep='+ this.dep ;
-        //  const res = await fetch(url);
-        //  const data = await res.json()
-      //   const std = {
-      //   username: this.username,
-      //   password: this.password,
-      //   dep: this.dep,  
-      //   File : this.file[0],   
-      // };
+  methods: {
+    async doSave() {
       const formData = new FormData();
-      formData.append("file", this.file[0]);
       formData.append("username", this.username);
       formData.append("password", this.password);
       formData.append("dep", this.dep);
-      
-      //console.log('user:', std)
-      const res = await axios.post('http://localhost:7001/add', formData)
-         console.log(data.ok)
-         this.username = ""
-         this.password = ""
-         this.dep = ""
 
-        //  if(data.ok == 1){
-        //   console.log('save success')
-        //   this.dialog = true
-        //  }else{
-        //   console.log('NO success')
-        //   this.dialog_error = true
-        //  }
-      },
-      
-      reset () {
-        this.$refs.form.reset()
-      },
-     },
-  }
+      try {
+        const res = await axios.post('http://localhost:7001/add', formData);
+        console.log(res.data.ok);
+        this.username = "";
+        this.password = "";
+        this.dep = "";
+
+        // Handle the response as needed
+        if (res.data.ok === 1) {
+          this.dialog = true;
+        } else {
+          this.dialog_error = true;
+        }
+      } catch (error) {
+        console.error('Save failed', error);
+      }
+    },
+
+    reset() {
+      this.$refs.form.reset();
+    },
+  },
+};
 </script>
+
+<style scoped>
+/* Add your custom styles here */
+.text-center {
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* Add more styles as needed */
+</style>

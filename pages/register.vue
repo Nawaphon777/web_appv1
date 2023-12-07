@@ -128,7 +128,7 @@ import axios from "axios";
         console.log(this.dep)
         
         //http://localhost/7001/insert?name=username&passwd=password&dep=dep
-        const url = 'http://localhost:7001/login?username='+ this.username +'&password=' + this.password + '&dep='+ this.dep ;
+        const url = 'http://localhost:9000/api/add?username='+ this.username +'&password=' + this.password + '&dep='+ this.dep ;
         const res = await fetch(url);
         const data = await res.json()
         if (data.ok == 1) {

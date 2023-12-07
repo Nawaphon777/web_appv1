@@ -1,104 +1,100 @@
 <template>
-  <div class="login-form">
-    <h2>Login</h2>
-    <form @submit.prevent="login">
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" id="username" v-model="formData.username" required>
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" v-model="formData.password" required>
-      </div>
-      <button type="submit">Login</button>
-    </form>
-  </div>
+  <v-img
+    class="mx-auto my-6"
+    max-width="228"
+    src="https://cdn.vuetifyjs.com/docs/images/logos/vuetify-logo-v3-slim-text-light.svg"
+  ></v-img>
+
+  <v-container>
+    <v-row justify="center">
+      <v-col cols="12" sm="8" md="6">
+        <v-sheet class="pa-6 elevation-4">
+          <v-form @submit.prevent="login">
+            <v-text-field v-model="username" label="Username" :rules="usernameRules"></v-text-field>
+
+            <v-text-field v-model="password" label="Password" :rules="passwordRules" type="password"></v-text-field>
+
+            <v-row justify="center">
+              <v-btn type="submit" class="mt-4" color="primary" dark>Login</v-btn>
+            </v-row>
+          </v-form>
+
+          <v-divider class="my-4"></v-divider>
+
+          <v-form @submit.prevent="register">
+            <v-btn type="submit" class="mt-2" block color="success" dark>Register</v-btn>
+          </v-form>
+        </v-sheet>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
 import axios from 'axios';
-export default {
-  data() {
-    return {
-      formData: {
-        username : "",
-        password : ""
-      }
-    };
-  },
-// async created() {
-// console.log("id=", this.$route.query.username);
-// this.username = this.$route.query.username;
-// const url = "http://localhost:7001/list";
-// const res = await fetch(url);
-// const data = await res.json();
-// console.log("data=", data.datas.username);
-// this.username = data.datas.username;
-// this.password = data.datas.password;
-// },
 
-methods: {
-   async login() {
-    console.log("data =>",this.formData)
-    const res = await axios.post("http://localhost:7001/login",this.formData);
+export default {
+  data: () => ({
+    username: "",
+    password: "",
+    // Add validation rules for username and password
+    usernameRules: [
+      v => !!v || 'Username is required',
+    ],
+    passwordRules: [
+      v => !!v || 'Password is required',
+    ],
+  }),
+  methods: {
+    async login() {
+      try {
+        if (!this.username || !this.password) {
+          // Display an error message or prevent the login if the fields are empty
+          console.error('Username and password are required');
+          return;
+        }
+
+        const credentials = {
+          username: this.username,
+          password: this.password,
+        };
+
+        // Use axios directly (no need for this.$axios)
+        const response = await axios.post('http://localhost:9000/api/signin', credentials);
+        console.log('data =>', response.data);
+
+        // Assuming you want to redirect on successful login
+        localStorage.setItem('token', response.data.token);
+        this.$router.replace('/info');
+      } catch (error) {
+        // Handle errors here
+        console.error('Error during login:', error);
+      }
+    },
+
+    async register() {
+      this.$router.push('/testadd');
     }
-  }
+  },
 };
 </script>
 
 <style scoped>
-.login-form {
-  max-width: 300px;
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+.mx-auto {
+  /* Center the component on the page */
+  margin: auto;
+}
+
+.text-center {
   text-align: center;
 }
 
-.login-form h2 {
-  margin-bottom: 20px;
-  color: #007bff;
-}
-
-.form-group {
-  margin: 10px 0;
-}
-
-label {
-  display: block;
-  font-weight: bold;
-}
-
-input[type="text"],
-input[type="password"] {
-  width: 100%;
-  padding: 10px;
-  margin: 5px 0;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-button:disabled {
-  background-color: #6c757d;
-  cursor: not-allowed;
-}
-
-.message {
-  color: red;
-  font-size: 14px;
-}
-
 /* Add more styles as needed */
-</style>
+.mt-4 {
+  width: 95%; /* Set the width to 100% for both buttons */
+}
 
+.mt-2 {
+  width: 100%; /* Set the width to 100% for both buttons */
+}
+</style>
